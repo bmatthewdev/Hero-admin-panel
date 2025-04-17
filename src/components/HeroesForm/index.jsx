@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { v4 as uuid } from 'uuid'
-import { heroCreated, heroUpdated } from '../actions'
-import { useHttp } from '../hooks/http.hook.js'
+import { heroCreated, heroUpdated } from '../HeroesList/heroesSlice.js'
+import { useHttp } from '../../hooks/http.hook.js'
 
 const HeroesForm = () => {
 	const { request } = useHttp()

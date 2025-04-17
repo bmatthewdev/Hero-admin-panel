@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchFilters, filterChanged } from '../actions'
-import { useHttp } from '../hooks/http.hook'
-import Spinner from './Spinner'
+import { useHttp } from '../../hooks/http.hook'
+import Spinner from '../Spinner'
+import { fetchFilters, filterChanged } from './filtersSlice'
 
 const HeroesFilters = () => {
 	const dispatch = useDispatch()
@@ -18,7 +18,7 @@ const HeroesFilters = () => {
 	}, [])
 
 	const onMount = () => {
-		dispatch(fetchFilters(request))
+		dispatch(fetchFilters({ request }))
 	}
 
 	return (

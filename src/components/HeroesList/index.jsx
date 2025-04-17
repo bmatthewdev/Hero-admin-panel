@@ -1,16 +1,16 @@
-import Error from './Error'
-import HeroesListItem from './HeroesListItem'
-import Spinner from './Spinner'
+import Error from '../Error.jsx'
+import HeroesListItem from '../HeroesListItem'
+import Spinner from '../Spinner.jsx'
 
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useHttp } from '../../hooks/http.hook.js'
 import {
 	fetchHeroes,
 	heroDeleted,
-	heroFiltered,
 	heroSelected,
-} from '../actions/index.js'
-import { useHttp } from '../hooks/http.hook'
+	heroesFiltered,
+} from './heroesSlice.js'
 
 const HeroesList = () => {
 	const heroes = useSelector((state) => state.heroes.heroes)
@@ -23,14 +23,14 @@ const HeroesList = () => {
 
 	useEffect(() => {
 		onMount()
-	}, [])
-
-	useEffect(() => {
-		onFilter(filterSelected)
 	}, [filterSelected])
 
+	// useEffect(() => {
+	// 	onFilter(filterSelected)
+	// }, [filterSelected])
+
 	const onMount = () => {
-		dispatch(fetchHeroes(request))
+		dispatch(fetchHeroes({ request, filterSelected }))
 	}
 
 	const onDelete = (heroId) => {
@@ -51,7 +51,7 @@ const HeroesList = () => {
 				filterSelected === 'all' ? '' : `${`element=${filterSelected}`}`
 			}`
 		)
-			.then((data) => dispatch(heroFiltered(data)))
+			.then((data) => dispatch(heroesFiltered(data)))
 			.catch((e) => console.error(e))
 	}
 
