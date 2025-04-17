@@ -5,19 +5,19 @@ import Spinner from './Spinner'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
+	fetchHeroes,
 	heroDeleted,
-	heroesFetched,
-	heroesFetching,
-	heroesFetchingError,
 	heroFiltered,
 	heroSelected,
 } from '../actions/index.js'
 import { useHttp } from '../hooks/http.hook'
 
 const HeroesList = () => {
-	const heroes = useSelector((state) => state.heroes)
-	const heroesLoadingStatus = useSelector((state) => state.heroesLoadingStatus)
-	const filterSelected = useSelector((state) => state.filterSelected)
+	const heroes = useSelector((state) => state.heroes.heroes)
+	const heroesLoadingStatus = useSelector(
+		(state) => state.heroes.heroesLoadingStatus
+	)
+	const filterSelected = useSelector((state) => state.filters.filterSelected)
 	const dispatch = useDispatch()
 	const { request } = useHttp()
 
@@ -30,10 +30,7 @@ const HeroesList = () => {
 	}, [filterSelected])
 
 	const onMount = () => {
-		dispatch(heroesFetching())
-		request('http://localhost:3000/heroes')
-			.then((data) => dispatch(heroesFetched(data)))
-			.catch(() => dispatch(heroesFetchingError()))
+		dispatch(fetchHeroes(request))
 	}
 
 	const onDelete = (heroId) => {

@@ -7,8 +7,8 @@ import { useHttp } from '../hooks/http.hook.js'
 const HeroesForm = () => {
 	const { request } = useHttp()
 	const dispatch = useDispatch()
-	const heroSelected = useSelector((state) => state.heroSelected)
-	const filters = useSelector((state) => state.filters)
+	const heroSelected = useSelector((state) => state.heroes.heroSelected)
+	const filters = useSelector((state) => state.filters.filters)
 	const [formValues, setFormValues] = useState({
 		name: '',
 		description: '',

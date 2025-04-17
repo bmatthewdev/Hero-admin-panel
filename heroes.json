@@ -4,7 +4,7 @@
       "id": "2",
       "name": "Неизвестный",
       "description": "Скрывающийся в тени!!!!",
-      "element": "water"
+      "element": "wind"
     },
     {
       "id": "3",
@@ -15,7 +15,7 @@
     {
       "id": "1195f243-85b7-4693-b8c9-e17961a5e0e2",
       "name": "Неизвестный",
-      "description": "None",
+      "description": "Something...",
       "element": "wind"
     }
   ],
