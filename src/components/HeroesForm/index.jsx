@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { v4 as uuid } from 'uuid'
-import { heroCreated, heroUpdated } from '../HeroesList/heroesSlice.js'
 import { useHttp } from '../../hooks/http.hook.js'
+import { selectAll } from '../HeroesFilters/filtersSlice.js'
+import { heroCreated, heroUpdated } from '../HeroesList/heroesSlice.js'
 
 const HeroesForm = () => {
 	const { request } = useHttp()
 	const dispatch = useDispatch()
 	const heroSelected = useSelector((state) => state.heroes.heroSelected)
-	const filters = useSelector((state) => state.filters.filters)
+	const filters = useSelector(selectAll)
 	const [formValues, setFormValues] = useState({
 		name: '',
 		description: '',

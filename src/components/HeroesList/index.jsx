@@ -9,11 +9,11 @@ import {
 	fetchHeroes,
 	heroDeleted,
 	heroSelected,
-	heroesFiltered,
+	selectAll,
 } from './heroesSlice.js'
 
 const HeroesList = () => {
-	const heroes = useSelector((state) => state.heroes.heroes)
+	const heroes = useSelector(selectAll)
 	const heroesLoadingStatus = useSelector(
 		(state) => state.heroes.heroesLoadingStatus
 	)
@@ -24,10 +24,6 @@ const HeroesList = () => {
 	useEffect(() => {
 		onMount()
 	}, [filterSelected])
-
-	// useEffect(() => {
-	// 	onFilter(filterSelected)
-	// }, [filterSelected])
 
 	const onMount = () => {
 		dispatch(fetchHeroes({ request, filterSelected }))
@@ -42,16 +38,6 @@ const HeroesList = () => {
 	const onSelect = (heroId) => {
 		request(`http://localhost:3000/heroes/${heroId}`)
 			.then((data) => dispatch(heroSelected(data)))
-			.catch((e) => console.error(e))
-	}
-
-	const onFilter = (filterSelected) => {
-		request(
-			`http://localhost:3000/heroes?${
-				filterSelected === 'all' ? '' : `${`element=${filterSelected}`}`
-			}`
-		)
-			.then((data) => dispatch(heroesFiltered(data)))
 			.catch((e) => console.error(e))
 	}
 
