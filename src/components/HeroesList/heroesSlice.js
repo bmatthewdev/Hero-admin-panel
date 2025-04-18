@@ -6,7 +6,6 @@ import {
 
 const heroesAdapter = createEntityAdapter()
 const initialState = heroesAdapter.getInitialState({
-	heroesLoadingStatus: 'idle',
 	heroSelected: {},
 })
 
@@ -35,25 +34,7 @@ const heroesSlice = createSlice({
 		},
 		heroUpdated: (state, action) => {
 			state.heroSelected = {}
-			heroesAdapter.updateOne(state, {
-				id: action.payload.id,
-				changes: action.payload,
-			})
 		},
-	},
-	extraReducers: (builder) => {
-		builder
-			.addCase(fetchHeroes.pending, (state) => {
-				state.heroesLoadingStatus = 'loading'
-			})
-			.addCase(fetchHeroes.fulfilled, (state, action) => {
-				state.heroesLoadingStatus = 'success'
-				heroesAdapter.setAll(state, action.payload)
-			})
-			.addCase(fetchHeroes.rejected, (state) => {
-				state.heroesLoadingStatus = 'error'
-			})
-			.addDefaultCase(() => {})
 	},
 })
 

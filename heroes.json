@@ -4,13 +4,13 @@
       "id": "2",
       "name": "Неизвестный",
       "description": "Скрывающийся в тени",
-      "element": "wind"
+      "element": "fire"
     },
     {
-      "id": "3",
+      "id": "304710c1-002a-48c6-8109-e714a9ed8a10",
       "name": "Морской герой",
-      "description": "Как аквамен, но не из DC",
-      "element": "earth"
+      "description": "Plavat)",
+      "element": "water"
     }
   ],
   "filters": [

@@ -2,37 +2,26 @@ import Error from '../Error.jsx'
 import HeroesListItem from '../HeroesListItem'
 import Spinner from '../Spinner.jsx'
 
-import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useDeleteHeroMutation, useGetHeroesQuery } from '../../api/apiSlice.js'
 import { useHttp } from '../../hooks/http.hook.js'
-import {
-	fetchHeroes,
-	heroDeleted,
-	heroSelected,
-	selectAll,
-} from './heroesSlice.js'
+import { heroSelected } from './heroesSlice.js'
 
 const HeroesList = () => {
-	const heroes = useSelector(selectAll)
-	const heroesLoadingStatus = useSelector(
-		(state) => state.heroes.heroesLoadingStatus
-	)
 	const filterSelected = useSelector((state) => state.filters.filterSelected)
-	const dispatch = useDispatch()
+	const {
+		data: heroes,
+		isLoading,
+		isSuccess,
+		isError,
+	} = useGetHeroesQuery(filterSelected)
+	const [deleteHero] = useDeleteHeroMutation()
+
 	const { request } = useHttp()
-
-	useEffect(() => {
-		onMount()
-	}, [filterSelected])
-
-	const onMount = () => {
-		dispatch(fetchHeroes({ request, filterSelected }))
-	}
+	const dispatch = useDispatch()
 
 	const onDelete = (heroId) => {
-		request(`http://localhost:3000/heroes/${heroId}`, 'DELETE')
-			.then(() => dispatch(heroDeleted(heroId)))
-			.catch((e) => console.error(e))
+		deleteHero(heroId).unwrap()
 	}
 
 	const onSelect = (heroId) => {
@@ -43,10 +32,10 @@ const HeroesList = () => {
 
 	return (
 		<div>
-			{heroesLoadingStatus === 'loading' && <Spinner />}
-			{heroesLoadingStatus === 'error' && <Error />}
-			{heroesLoadingStatus === 'success' &&
-				(heroes.length > 0 ? (
+			{isLoading && <Spinner />}
+			{isError && <Error />}
+			{isSuccess &&
+				(heroes?.length > 0 ? (
 					heroes.map(({ id, ...props }) => (
 						<HeroesListItem
 							handleDelete={() => onDelete(id)}

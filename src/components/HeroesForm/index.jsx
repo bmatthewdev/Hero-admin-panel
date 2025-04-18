@@ -1,13 +1,19 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { v4 as uuid } from 'uuid'
-import { useHttp } from '../../hooks/http.hook.js'
+import {
+	useCreateHeroMutation,
+	useUpdateHeroMutation,
+} from '../../api/apiSlice.js'
 import { selectAll } from '../HeroesFilters/filtersSlice.js'
-import { heroCreated, heroUpdated } from '../HeroesList/heroesSlice.js'
+import { heroUpdated } from '../HeroesList/heroesSlice.js'
 
 const HeroesForm = () => {
-	const { request } = useHttp()
+	const [createHero, { isLoading: isCreating }] = useCreateHeroMutation()
+	const [updateHero, { isLoading: isUpdating }] = useUpdateHeroMutation()
+
 	const dispatch = useDispatch()
+
 	const heroSelected = useSelector((state) => state.heroes.heroSelected)
 	const filters = useSelector(selectAll)
 	const [formValues, setFormValues] = useState({
@@ -38,20 +44,13 @@ const HeroesForm = () => {
 			...Object.fromEntries(formData),
 		}
 
-		if (heroSelected.id) {
-			request(
-				`http://localhost:3000/heroes/${heroSelected.id}`,
-				'PUT',
-				JSON.stringify(hero)
-			)
-				.then((data) => dispatch(heroUpdated(data)))
-				.catch((e) => console.error(e))
-		} else {
-			request('http://localhost:3000/heroes', 'POST', JSON.stringify(hero))
-				.then((data) => dispatch(heroCreated(data)))
-				.catch((e) => console.error(e))
-		}
-
+		heroSelected.id
+			? updateHero(hero)
+					.unwrap()
+					.then(() => dispatch(heroUpdated()))
+			: createHero(hero)
+					.unwrap()
+					.then(() => dispatch(heroUpdated()))
 		setFormValues({ name: '', description: '', element: '' })
 	}
 
@@ -120,7 +119,11 @@ const HeroesForm = () => {
 				</select>
 			</div>
 
-			<button type='submit' className='btn btn-primary'>
+			<button
+				type='submit'
+				className='btn btn-primary'
+				disabled={isCreating || isUpdating}
+			>
 				{heroSelected.id ? 'Сохранить' : 'Создать'}
 			</button>
 		</form>
